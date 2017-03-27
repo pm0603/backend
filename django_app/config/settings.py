@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-import json
 import os
+import json
+
+DEBUG = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,24 +26,11 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 serve관련 에러 날 경우 반드시 추가해야 함
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-DEBUG = os.environ.get('MODE') == 'DEBUG'
 
 # Config files
 CONF_DIR = os.path.join(ROOT_DIR, '.conf-secret')
 CONFIG_FILE_COMMON = os.path.join(CONF_DIR, 'settings_common.json')
-if DEBUG:
-    CONFIG_FILE = os.path.join(CONF_DIR, 'settings_local.json')
-else:
-    CONFIG_FILE = os.path.join(CONF_DIR, 'settings_deploy.json')
-config_common = json.loads(open(CONFIG_FILE_COMMON).read())
-config = json.loads(open(CONFIG_FILE).read())
-# common과 현재 사용설정 (local또는 deploy)를 합쳐줌
-for key, key_dict in config_common.items():
-    if not config.get(key):
-        config[key] = {}
-    for inner_key, inner_key_dict in key_dict.items():
-        config[key][inner_key] = inner_key_dict
-
+config = json.loads(open(CONFIG_FILE_COMMON).read())
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -49,10 +38,7 @@ for key, key_dict in config_common.items():
 SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -95,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -105,7 +90,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -125,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -138,7 +121,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
