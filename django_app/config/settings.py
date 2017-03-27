@@ -26,7 +26,6 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 serve관련 에러 날 경우 반드시 추가해야 함
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-
 # Config files
 CONF_DIR = os.path.join(ROOT_DIR, '.conf-secret')
 CONFIG_FILE_COMMON = os.path.join(CONF_DIR, 'settings_common.json')
