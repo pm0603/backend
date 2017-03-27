@@ -4,15 +4,31 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
-        user = MyUser(email=email)
+    def create_user(self, email, password, **extra_fields):
+        user = MyUser(
+            email=email,
+            **extra_fields)
         user.set_password(password)
-        user.is_staff = True
-        user.is_superuser = True
+        user.is_staff = False
+        user.is_superuser = False
 
         user.save()
 
         return user
+
+    def _create_user(self, email, password, **extra_fields):
+        user = MyUser(
+            email=email,
+            **extra_fields)
+        user.set_password(password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
+        return self._create_user(email, password, **extra_fields)
 
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
@@ -24,3 +40,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.email
+
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
