@@ -51,10 +51,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'member.apps.MemberConfig',
-<<<<<<< HEAD
-=======
+
     'performance.apps.PerformanceConfig',
->>>>>>> 81eb758d00257b9b06ef88d091a8c110c360f9e4
+
 ]
 
 MIDDLEWARE = [
