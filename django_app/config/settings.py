@@ -49,6 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # facebook 로그인 기능을 위한 앱 추가
+    'social.apps.django_app.default',
+
+    # rest 관련
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',
@@ -80,10 +84,40 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # facebook 로그인 기능을 위한 추가 설정
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+# facebook 로그인 기능을 위한 추가 설정
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# Facebook
+SOCIAL_AUTH_FACEBOOK_KEY = config['facebook']['app_id']
+SOCIAL_AUTH_FACEBOOK_SECRET = config['facebook']['secret_code']
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'picture']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+
+# ----------------------------------------------------
+
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
