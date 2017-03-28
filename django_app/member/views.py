@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -38,3 +39,14 @@ class SignUp(APIView):
                     return Response("이미 존재하는 email 입니다.", status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response("회원가입이 완료되었습니다.", status=status.HTTP_200_OK)
+
+
+class Logout(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+
+        if request.user.auth:
+            return Response("정상적으로 로그인 되었습니다.", status=status.HTTP_200_OK)
+        else:
+            return Response("이미 로그아웃 되었습니다.", status=status.HTTP_400_BAD_REQUEST)
