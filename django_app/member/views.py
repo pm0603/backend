@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,7 +20,9 @@ class Login(APIView):
             )
 
             if user:
-                return Response("로그인되었습니다.", status=status.HTTP_200_OK)
+                token = Token.objects.get_or_create(user=user)[0]
+                ret = {"token": token.key}
+                return Response(ret, status=status.HTTP_200_OK)
 
             else:
                 return Response("이메일 혹은 비밀번호가 올바르지 않습니다.", status=status.HTTP_400_BAD_REQUEST)
@@ -45,8 +48,8 @@ class Logout(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
-
         if request.user.auth:
-            return Response("정상적으로 로그인 되었습니다.", status=status.HTTP_200_OK)
+            request.user.auth_token.delete()
+            return Response("정상적으로 로그아웃 되었습니다.", status=status.HTTP_200_OK)
         else:
             return Response("이미 로그아웃 되었습니다.", status=status.HTTP_400_BAD_REQUEST)
