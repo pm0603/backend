@@ -37,7 +37,7 @@ config = json.loads(open(CONFIG_FILE_COMMON).read())
 SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
