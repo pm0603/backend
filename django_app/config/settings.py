@@ -34,7 +34,7 @@ config = json.loads(open(CONFIG_FILE_COMMON).read())
 SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # facebook 로그인 기능을 위한 앱 추가
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
+
+    # rest 관련
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',
@@ -79,10 +85,54 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # facebook 로그인 기능을 위한 추가 설정
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+
+# REST관련 설정 및 facebook 로그인 관련 설정
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
+}
+
+
+# facebook 로그인 기능을 위한 추가 설정
+AUTHENTICATION_BACKENDS = (
+
+    # Others auth providers (e.g. Google, OpenId, etc)
+
+    # Facebook OAuth2
+    'social_core.backends.facebook.FacebookAppOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+
+)
+
+# Facebook configuration
+SOCIAL_AUTH_FACEBOOK_KEY = config['facebook']['app_id']
+SOCIAL_AUTH_FACEBOOK_SECRET = config['facebook']['secret_code']
+
+# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook.
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+# ----------------------------------------------------
+
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
