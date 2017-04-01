@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'social_django',
     'rest_framework_social_oauth2',
 
+    # open api
+    'openapi',
+
     # rest 관련
     'rest_framework',
     'rest_auth',

@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 
     # open api 확인용 url
-    url(r'^api/', include('apitest.urls')),
+    url(r'^api/', include('openapi.urls')),
 
 ]

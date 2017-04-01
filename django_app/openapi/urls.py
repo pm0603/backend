@@ -1,7 +1,6 @@
 from django.conf.urls import url
 
 from . import views
-from .api import rest
 
 urlpatterns = [
     url(r'^apitest/area-search/', views.Area.as_view()),
