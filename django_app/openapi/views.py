@@ -12,6 +12,41 @@ decode_key = unquote(config['API']['API_key'])
 global_url = 'http://www.culture.go.kr/openapi/rest/publicperformancedisplays/'
 
 
+def xml_parser_db_save(request):
+    request.get_method = lambda: 'GET'
+    response_body = urlopen(request).read()
+    data = xmltodict.parse(response_body)
+
+    item_path = data['response']['msgBody']['perforList']
+
+    for index, item in enumerate(item_path):
+        item_path_index = item_path[index]
+        seq = item_path_index['seq']
+        title = item_path_index['title']
+        place = item_path_index['place']
+        startDate = item_path_index['startDate']
+        endDate = item_path_index['endDate']
+        realmName = item_path_index['realmName']
+        area = item_path_index['area']
+        thumbnail = item_path_index['thumbnail']
+        gpsX = item_path_index['gpsX']
+        gpsY = item_path_index['gpsY']
+
+        ContentList.objects.get_or_create(
+            seq=seq,
+            title=title,
+            place=place,
+            startDate=startDate,
+            endDate=endDate,
+            realmName=realmName,
+            area=area,
+            thumbnail=thumbnail,
+            gpsX=gpsX,
+            gpsY=gpsY,
+        )
+    return data
+
+
 class Area(APIView):
     def get(self, request):
         keyword = request.GET.get('keyword')
@@ -21,44 +56,12 @@ class Area(APIView):
                                        quote_plus('sido'): keyword,
                                        quote_plus('gugun'): '',
                                        quote_plus('rows'): rows})
-        print('지역별 URL : ' + url)
         """
         sido = 지역 (서울, 대구, 등..)
         gugun = 구/군 (Null)으로 하면 결과가 더 잘나옴.
         """
         request = Request(url + queryParams)
-        request.get_method = lambda: 'GET'
-        response_body = urlopen(request).read()
-        data = xmltodict.parse(response_body)
-        print(data)
-
-        item_path = data['response']['msgBody']['perforList']
-
-        for index, item in enumerate(item_path):
-            item_path_index = item_path[index]
-            seq = item_path_index['seq']
-            title = item_path_index['title']
-            place = item_path_index['place']
-            startDate = item_path_index['startDate']
-            endDate = item_path_index['endDate']
-            realmName = item_path_index['realmName']
-            area = item_path_index['area']
-            thumbnail = item_path_index['thumbnail']
-            gpsX = item_path_index['gpsX']
-            gpsY = item_path_index['gpsY']
-
-            ContentList.objects.get_or_create(
-                seq=seq,
-                title=title,
-                place=place,
-                startDate=startDate,
-                endDate=endDate,
-                realmName=realmName,
-                area=area,
-                thumbnail=thumbnail,
-                gpsX=gpsX,
-                gpsY=gpsY,
-            )
+        data = xml_parser_db_save(request)
         return Response(data)
 
 
@@ -79,37 +82,7 @@ class Genre(APIView):
         D = 미술
         """
         request = Request(url + queryParams)
-        request.get_method = lambda: 'GET'
-        response_body = urlopen(request).read()
-        data = xmltodict.parse(response_body)
-
-        item_path = data['response']['msgBody']['perforList']
-
-        for index, item in enumerate(item_path):
-            item_path_index = item_path[index]
-            seq = item_path_index['seq']
-            title = item_path_index['title']
-            place = item_path_index['place']
-            startDate = item_path_index['startDate']
-            endDate = item_path_index['endDate']
-            realmName = item_path_index['realmName']
-            area = item_path_index['area']
-            thumbnail = item_path_index['thumbnail']
-            gpsX = item_path_index['gpsX']
-            gpsY = item_path_index['gpsY']
-
-            ContentList.objects.get_or_create(
-                seq=seq,
-                title=title,
-                place=place,
-                startDate=startDate,
-                endDate=endDate,
-                realmName=realmName,
-                area=area,
-                thumbnail=thumbnail,
-                gpsX=gpsX,
-                gpsY=gpsY,
-            )
+        data = xml_parser_db_save(request)
         return Response(data)
 
 
@@ -128,37 +101,7 @@ class Period(APIView):
         gugun = 구/군 (Null)으로 하면 결과가 더 잘나옴.
         """
         request = Request(url + queryParams)
-        request.get_method = lambda: 'GET'
-        response_body = urlopen(request).read()
-        data = xmltodict.parse(response_body)
-
-        item_path = data['response']['msgBody']['perforList']
-
-        for index, item in enumerate(item_path):
-            item_path_index = item_path[index]
-            seq = item_path_index['seq']
-            title = item_path_index['title']
-            place = item_path_index['place']
-            startDate = item_path_index['startDate']
-            endDate = item_path_index['endDate']
-            realmName = item_path_index['realmName']
-            area = item_path_index['area']
-            thumbnail = item_path_index['thumbnail']
-            gpsX = item_path_index['gpsX']
-            gpsY = item_path_index['gpsY']
-
-            ContentList.objects.get_or_create(
-                seq=seq,
-                title=title,
-                place=place,
-                startDate=startDate,
-                endDate=endDate,
-                realmName=realmName,
-                area=area,
-                thumbnail=thumbnail,
-                gpsX=gpsX,
-                gpsY=gpsY,
-            )
+        data = xml_parser_db_save(request)
         return Response(data)
 
 
@@ -168,18 +111,14 @@ class Detail(APIView):
         url = global_url + 'd/'
         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
                                        quote_plus('seq'): seq})
-        print('지역별 URL : ' + url)
         """
         sido = 지역 (서울, 대구, 등..)
         gugun = 구/군 (Null)으로 하면 결과가 더 잘나옴.
         """
-        print(queryParams)
-
         request = Request(url + queryParams)
         request.get_method = lambda: 'GET'
         response_body = urlopen(request).read()
         data = xmltodict.parse(response_body)
-        print(type(data))
 
         item_path = data['response']['msgBody']['perforInfo']
 
@@ -200,9 +139,6 @@ class Detail(APIView):
         placeUrl = item_path['placeUrl']
         placeAddr = item_path['placeAddr']
         placeSeq = item_path['placeSeq']
-
-        print(content)
-        print(phone)
 
         ContentList.objects.filter(seq=seq).update(
             seq=seq,
