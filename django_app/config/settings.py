@@ -20,7 +20,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # 정적파일을 관리할 폴더 경로 지정
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 serve관련 에러 날 경우 반드시 추가해야 함
+# 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 server 관련 에러 날 경우 반드시 추가해야 함
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 # Config files
@@ -60,6 +60,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
+<<<<<<< HEAD
+=======
+    # open api
+    'openapi',
+
+    # rest 관련
+>>>>>>> 178743f8ed10ca039e28835fd1672754d2d07f80
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',

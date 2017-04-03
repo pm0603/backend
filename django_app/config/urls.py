@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 
 urlpatterns = [
@@ -23,4 +25,7 @@ urlpatterns = [
     # facebook로그인을 확인하기 위한 url
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 
-]
+    # open api 확인용 url
+    url(r'^api/', include('openapi.urls')),
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
