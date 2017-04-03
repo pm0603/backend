@@ -40,9 +40,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        # OAuth
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
 
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
@@ -59,14 +56,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
-<<<<<<< HEAD
-=======
     # open api
     'openapi',
 
     # rest 관련
->>>>>>> 178743f8ed10ca039e28835fd1672754d2d07f80
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',
@@ -75,16 +68,6 @@ INSTALLED_APPS = [
     'performance.apps.PerformanceConfig',
 
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-
-    # OAuth
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
-
 ]
 
 MIDDLEWARE = [
@@ -112,12 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-
-                # OAuth
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
-
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
@@ -156,16 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    # Facebook OAuth2
-    'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-    # django-rest-framework-social-oauth2
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-
 ]
-SITE_ID = 1
-
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

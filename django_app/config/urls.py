@@ -22,9 +22,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include("member.urls")),
 
-    # facebook로그인을 확인하기 위한 url
-    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
-
     # open api 확인용 url
     url(r'^api/', include('openapi.urls')),
 
