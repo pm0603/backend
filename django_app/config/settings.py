@@ -97,20 +97,28 @@ TEMPLATES = [
     },
 ]
 
-
 # REST관련 설정 및 facebook 로그인 관련 설정
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
+    # Open Api 렌더링 및 파서
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_xml.parsers.XMLParser',
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+
 }
 
-
 # facebook 로그인 기능을 위한 추가 설정
-AUTHENTICATION_BACKENDS = (
-
-    # Others auth providers (e.g. Google, OpenId, etc)
+AUTHENTICATION_BACKENDS = (  # Others auth providers (e.g. Google, OpenId, etc)
 
     # Facebook OAuth2
     'social_core.backends.facebook.FacebookAppOAuth2',
