@@ -34,7 +34,20 @@ config = json.loads(open(CONFIG_FILE_COMMON).read())
 SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # OAuth
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
+    'PAGE_SIZE': 1
+}
 
 # Application definition
 
@@ -46,19 +59,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # facebook 로그인 기능을 위한 앱 추가
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
 
-    # rest 관련
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',
 
     'member.apps.MemberConfig',
-
     'performance.apps.PerformanceConfig',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+
+    # OAuth
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
 
 ]
 
@@ -70,6 +88,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -77,7 +96,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATE_DIR
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,53 +107,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                # facebook 로그인 기능을 위한 추가 설정
+                # OAuth
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+
             ],
         },
     },
 ]
-
-
-# REST관련 설정 및 facebook 로그인 관련 설정
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
-    ),
-}
-
-
-# facebook 로그인 기능을 위한 추가 설정
-AUTHENTICATION_BACKENDS = (
-
-    # Others auth providers (e.g. Google, OpenId, etc)
-
-    # Facebook OAuth2
-    'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-
-    # django-rest-framework-social-oauth2
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-
-    # Django
-    'django.contrib.auth.backends.ModelBackend',
-
-)
-
-# Facebook configuration
-SOCIAL_AUTH_FACEBOOK_KEY = config['facebook']['app_id']
-SOCIAL_AUTH_FACEBOOK_SECRET = config['facebook']['secret_code']
-
-# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook.
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
-# ----------------------------------------------------
-
-
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -164,12 +146,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # Facebook OAuth2
+    'social_core.backends.facebook.FacebookAppOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+]
+SITE_ID = 1
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -181,3 +177,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Facebook
+FB_APP_ID = config['facebook']['app_id']
+FB_SECRET_CODE = config['facebook']['secret_code']
+FB_APP_ACCESS_TOKEN = FB_APP_ID + '|' + FB_SECRET_CODE
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
