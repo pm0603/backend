@@ -59,14 +59,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
-<<<<<<< HEAD
-=======
     # open api
     'openapi',
 
     # rest 관련
->>>>>>> 178743f8ed10ca039e28835fd1672754d2d07f80
+
     'rest_framework',
     'rest_auth',
     'rest_framework.authtoken',
@@ -128,11 +125,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# postgre sql을 쓰기 위한 설정입니다. (최영민)
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+      'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config['database']['name'],
+            'USER': config['database']['user'],
+            'PASSWORD': config['database']['password'],
+            'HOST': 'localhost',
+            'PORT': '5432',
+      }
 }
 
 # Password validation
