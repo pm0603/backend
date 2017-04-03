@@ -122,11 +122,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+
+# AWS설정입니다. (최영민)
+AWS_ACCESS_KEY_ID = config['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config['aws']['secret_access_key']
+AWS_STORAGE_BUCKET_NAME = config['aws']['s3_storage_bucket_name']
+
+# S3를 쓰기 위한 설정입니다.(최영민)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 # postgre sql을 쓰기 위한 설정입니다. (최영민)
-
 DATABASES = {
       'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
