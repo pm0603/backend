@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import json
 import os
 
-DEBUG = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +20,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # 정적파일을 관리할 폴더 경로 지정
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 server 관련 에러 날 경우 반드시 추가해야 함
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+
+# 디버그 및 S3를 쓰기 위한 설정입니다.(최영민)
+
+DEBUG = os.environ.get('MODE') == 'DEBUG'
+STORAGE_S3 = os.environ.get('STORAGE') == 'S3' or DEBUG is False
+
+if STORAGE_S3:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+    STATIC_URL = '/static/'
+
+
+
 
 # Config files
 CONF_DIR = os.path.join(ROOT_DIR, '.conf-secret')
@@ -128,9 +141,7 @@ AWS_ACCESS_KEY_ID = config['aws']['access_key_id']
 AWS_SECRET_ACCESS_KEY = config['aws']['secret_access_key']
 AWS_STORAGE_BUCKET_NAME = config['aws']['s3_storage_bucket_name']
 
-# S3를 쓰기 위한 설정입니다.(최영민)
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 
 
@@ -197,7 +208,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 # Facebook
 FB_APP_ID = config['facebook']['app_id']
