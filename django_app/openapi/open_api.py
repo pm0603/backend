@@ -7,11 +7,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from config.settings import config
-from .models import Content
+from .models.content import Content
 
 decode_key = unquote(config['API']['API_key'])
 global_url = 'http://www.culture.go.kr/openapi/rest/publicperformancedisplays/'
 
+
+# 상세 정보 저장 함수
 
 def detail_get(seq):
     url = global_url + 'd/'
@@ -22,7 +24,7 @@ def detail_get(seq):
     url_query.get_method = lambda: 'GET'
     response_body = urlopen(url_query).read()
     data = xmltodict.parse(response_body)
-
+    # 상세 정보 DB 저장
     item_path = data['response']['msgBody']['perforInfo']
 
     price = item_path['price']
@@ -44,7 +46,7 @@ def detail_get(seq):
     )
     return Response(data)
 
-
+# xml을 parser 후 db 저장
 def xml_parser_db_save(request):
     request.get_method = lambda: 'GET'
     response_body = urlopen(request).read()
@@ -82,7 +84,7 @@ def xml_parser_db_save(request):
         detail_get(seq)
     return data
 
-
+# 지역을 검색시 동작
 class Area(APIView):
     def get(self, request):
         keyword = request.GET.get('keyword')
@@ -100,7 +102,7 @@ class Area(APIView):
         data = xml_parser_db_save(url_query)
         return Response(data)
 
-
+# 분야별로 검색시 동작
 class Genre(APIView):
     def get(self, request):
         keyword = request.GET.get('keyword')
@@ -121,7 +123,7 @@ class Genre(APIView):
         data = xml_parser_db_save(url_query)
         return Response(data)
 
-
+# 기간별 검색시 동작
 class Period(APIView):
     def get(self, request):
         start = request.GET.get('start')
@@ -133,8 +135,8 @@ class Period(APIView):
                                        quote_plus('to'): end,
                                        quote_plus('rows'): rows})
         """
-        sido = 지역 (서울, 대구, 등..)
-        gugun = 구/군 (Null)으로 하면 결과가 더 잘나옴.
+        from = 공연 시작일
+        to = 공연 종료일
         """
         url_query = Request(url + queryParams)
         data = xml_parser_db_save(url_query)

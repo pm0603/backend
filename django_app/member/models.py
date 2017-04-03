@@ -1,6 +1,9 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.conf import settings
+
+from openapi.models.content import Content
 
 
 class UserManager(BaseUserManager):
@@ -49,3 +52,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+class BookmarkContent(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    content = models.ForeignKey(Content)
+    created_date = models.DateTimeField(auto_now_add=True)
