@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
+from openapi.models.content import Content
 
 
 class UserManager(BaseUserManager):
@@ -36,6 +39,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     joined_date = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    bookmark_content = models.ManyToManyField(
+        Content,
+        blank=True,
+        through='BookmarkContent',
+    )
 
     USERNAME_FIELD = "email"
 
@@ -49,3 +57,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+
+class BookmarkContent(models.Model):
+    user = models.ForeignKey(MyUser)
+    content = models.ForeignKey(Content)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            ('user', 'content')
+        )

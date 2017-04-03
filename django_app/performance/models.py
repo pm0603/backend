@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 
 
@@ -11,8 +10,3 @@ class Performance(models.Model):
     contact_info = models.CharField(null=True, max_length=30)
     performance_copyright = models.CharField(max_length=30)
 
-
-class Bookmark(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    performance = models.ForeignKey(Performance)
-    created_date = models.DateTimeField(auto_now_add=True)
