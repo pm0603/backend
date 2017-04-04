@@ -46,6 +46,7 @@ def detail_get(seq):
     )
     return Response(data)
 
+
 # xml을 parser 후 db 저장
 def xml_parser_db_save(request):
     request.get_method = lambda: 'GET'
@@ -84,11 +85,12 @@ def xml_parser_db_save(request):
         detail_get(seq)
     return data
 
+
 # 지역을 검색시 동작
 class Area(APIView):
     def get(self, request):
         keyword = request.GET.get('keyword')
-        rows = request.GET.get('rows')
+        rows = request.GET.get('rows', default=10)
         url = global_url + 'area'
         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
                                        quote_plus('sido'): keyword,
@@ -102,12 +104,13 @@ class Area(APIView):
         data = xml_parser_db_save(url_query)
         return Response(data)
 
+
 # 분야별로 검색시 동작
 class Genre(APIView):
     def get(self, request):
         keyword = request.GET.get('keyword')
         Code = request.GET.get('code')
-        rows = request.GET.get('rows')
+        rows = request.GET.get('rows', default=10)
         url = global_url + 'realm'
         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
                                        quote_plus('realmCode'): Code,
@@ -123,12 +126,13 @@ class Genre(APIView):
         data = xml_parser_db_save(url_query)
         return Response(data)
 
+
 # 기간별 검색시 동작
 class Period(APIView):
     def get(self, request):
         start = request.GET.get('start')
         end = request.GET.get('end')
-        rows = request.GET.get('rows')
+        rows = request.GET.get('rows', default=10)
         url = global_url + 'period'
         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
                                        quote_plus('from'): start,
