@@ -26,3 +26,6 @@ urlpatterns = [
     url(r'^api/', include('openapi.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# if settings.DEBUG is True:
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
