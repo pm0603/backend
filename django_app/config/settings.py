@@ -21,8 +21,8 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # 정적 파일을 모아서 서빙할 폴더 경로 지정 테스트시 server 관련 에러 날 경우 반드시 추가해야 함
 
 # 디버그 및 S3를 쓰기 위한 설정입니다.(최영민)
-
-DEBUG = os.environ.get('MODE') == 'DEBUG'
+DEBUG = True
+# DEBUG = os.environ.get('MODE') == 'DEBUG'
 STORAGE_S3 = os.environ.get('STORAGE') == 'S3' or DEBUG is False
 DB_RDS = os.environ.get('DB') == 'RDS' or DEBUG is False
 
@@ -44,7 +44,7 @@ config = json.loads(open(CONFIG_FILE_COMMON).read())
 SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = []
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -210,7 +210,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-
+# DEBUG가 False일 시 반드시 설정해야 하는 ALLOWED_HOSTS입니다.
+ALLOWED_HOSTS = ["*"]
 
 # Facebook
 FB_APP_ID = config['facebook']['app_id']
