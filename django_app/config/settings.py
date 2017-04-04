@@ -24,6 +24,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 DEBUG = os.environ.get('MODE') == 'DEBUG'
 STORAGE_S3 = os.environ.get('STORAGE') == 'S3' or DEBUG is False
+DB_RDS = os.environ.get('DB') == 'RDS' or DEBUG is False
 
 if STORAGE_S3:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -144,15 +145,20 @@ AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-# postgre sql을 쓰기 위한 설정입니다. (최영민)
+# DB_RDS 및 postgre sql을 쓰기 위한 설정입니다. (최영민)
+if DB_RDS or DEBUG:
+    db_config = config['db_rds']
+else:
+    db_config = config['database']
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config['database']['name'],
-        'USER': config['database']['user'],
-        'PASSWORD': config['database']['password'],
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': db_config['engine'],
+        'NAME': db_config['name'],
+        'USER': db_config['user'],
+        'PASSWORD': db_config['password'],
+        'HOST': db_config['host'],
+        'PORT': db_config['port'],
     }
 }
 
