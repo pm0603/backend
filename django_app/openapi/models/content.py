@@ -22,3 +22,4 @@ class Content(models.Model):
     place_addr = models.CharField(max_length=100, null=True)
     place_seq = models.CharField(max_length=10, null=True)
     comment = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+

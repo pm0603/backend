@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^area', snippet_area),
     # 분야별 검색 (search= genre)
     url(r'^genre', snippet_genre),
+
 ]

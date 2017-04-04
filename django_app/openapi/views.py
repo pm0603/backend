@@ -12,7 +12,6 @@ class SnippetViewSet(viewsets.ModelViewSet):
     search_fields = ('seq', 'title', 'start_date', 'end_date', 'place', 'realm_name',
                      'area', 'price', 'phone')
 
-
 class DetailViewSet(viewsets.ModelViewSet):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
@@ -32,3 +31,4 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = ContentSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('realm_name', 'realm_name')
+
