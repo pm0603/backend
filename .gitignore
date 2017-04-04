@@ -139,3 +139,8 @@ ENV/
 .ropeproject
 
 # End of https://www.gitignore.io/api/python,pycharm,django
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
