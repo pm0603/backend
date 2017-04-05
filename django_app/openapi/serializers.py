@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models.content import Content
+from openapi.models import Content
 
 
 class ContentSerializer(serializers.ModelSerializer):
