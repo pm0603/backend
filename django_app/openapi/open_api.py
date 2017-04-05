@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from config.settings import config
-from .models.content import Content
+from openapi.models import Content
 
 decode_key = unquote(config['API']['API_key'])
 global_url = 'http://www.culture.go.kr/openapi/rest/publicperformancedisplays/'

@@ -107,6 +107,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+SITE_ID=1
 
 ROOT_URLCONF = 'config.urls'
 
@@ -190,29 +191,29 @@ AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 # DB_RDS 및 postgre sql을 쓰기 위한 설정입니다. (최영민)
-if DB_RDS or DEBUG:
-    db_config = config['db_rds']
-else:
-    db_config = config['database']
+# if DB_RDS or DEBUG:
+#     db_config = config['db_rds']
+# else:
+#     db_config = config['database']
 
-DATABASES = {
-    'default': {
-        'ENGINE': db_config['engine'],
-        'NAME': db_config['name'],
-        'USER': db_config['user'],
-        'PASSWORD': db_config['password'],
-        'HOST': db_config['host'],
-        'PORT': db_config['port'],
-    }
-}
-
-# 로컬에서 테스트용
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ENGINE': db_config['engine'],
+#         'NAME': db_config['name'],
+#         'USER': db_config['user'],
+#         'PASSWORD': db_config['password'],
+#         'HOST': db_config['host'],
+#         'PORT': db_config['port'],
 #     }
 # }
+
+# 로컬에서 테스트용
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

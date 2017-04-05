@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
-from openapi.models.content import Content
+from openapi.models import Content
 
 
 class UserManager(BaseUserManager):
@@ -32,8 +32,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self._create_user(email, password, **extra_fields)
 
-
-    def create_facebook_user(self,email, facebook_id, password=None):
+    def create_facebook_user(self, email, facebook_id, password=None):
         user = MyUser(
             email=email,
             facebook_id=facebook_id)
@@ -56,7 +55,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     )
     facebook_id = models.CharField(max_length=50, blank=True)
     is_facebook = models.BooleanField(default=False)
-
 
     USERNAME_FIELD = "email"
 
