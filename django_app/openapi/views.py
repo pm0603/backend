@@ -1,7 +1,7 @@
 from rest_framework import filters
 from rest_framework import viewsets
 
-from .models.content import Content
+from openapi.models import Content
 from .serializers import ContentSerializer
 
 
