@@ -245,10 +245,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -267,8 +264,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 
-STATIC_URL = '/static/'
-
 # DEBUG가 False일 시 반드시 설정해야 하는 ALLOWED_HOSTS입니다.
 ALLOWED_HOSTS = ["*"]
 
@@ -276,8 +271,3 @@ ALLOWED_HOSTS = ["*"]
 FB_APP_ID = config['facebook']['app_id']
 FB_SECRET_CODE = config['facebook']['secret_code']
 FB_APP_ACCESS_TOKEN = FB_APP_ID + '|' + FB_SECRET_CODE
-
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
