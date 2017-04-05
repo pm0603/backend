@@ -108,13 +108,11 @@ class Area(APIView):
 # 분야별로 검색시 동작
 class Genre(APIView):
     def get(self, request):
-        keyword = request.GET.get('keyword')
-        Code = request.GET.get('code')
+        code = request.GET.get('code')
         rows = request.GET.get('rows', default=10)
         url = global_url + 'realm'
         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
-                                       quote_plus('realmCode'): Code,
-                                       quote_plus('keyword'): keyword,
+                                       quote_plus('realmCode'): code,
                                        quote_plus('rows'): rows})
         """
         A = 연극
@@ -126,22 +124,22 @@ class Genre(APIView):
         data = xml_parser_db_save(url_query)
         return Response(data)
 
-
 # 기간별 검색시 동작
-class Period(APIView):
-    def get(self, request):
-        start = request.GET.get('start')
-        end = request.GET.get('end')
-        rows = request.GET.get('rows', default=10)
-        url = global_url + 'period'
-        queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
-                                       quote_plus('from'): start,
-                                       quote_plus('to'): end,
-                                       quote_plus('rows'): rows})
-        """
-        from = 공연 시작일
-        to = 공연 종료일
-        """
-        url_query = Request(url + queryParams)
-        data = xml_parser_db_save(url_query)
-        return Response(data)
+# 검색 조건과 결과가 공공데이터에서 오는 값들도 불분명해서 일단 주석처리합니다
+# class Period(APIView):
+#     def get(self, request):
+#         start = request.GET.get('start')
+#         end = request.GET.get('end')
+#         rows = request.GET.get('rows', default=10)
+#         url = global_url + 'period'
+#         queryParams = '?' + urlencode({quote_plus('ServiceKey'): decode_key,
+#                                        quote_plus('from'): start,
+#                                        quote_plus('to'): end,
+#                                        quote_plus('rows'): rows})
+#         """
+#         from = 공연 시작일
+#         to = 공연 종료일
+#         """
+#         url_query = Request(url + queryParams)
+#         data = xml_parser_db_save(url_query)
+#         return Response(data)
