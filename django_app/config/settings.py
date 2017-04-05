@@ -69,6 +69,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # CORS관련 (최영민)
+    'corsheaders',
+
     # open api
     'openapi',
 
@@ -98,6 +101,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # CORS관련 설정(최영민)
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -107,7 +113,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
-SITE_ID=1
+SITE_ID = 1
+
+# CORS관련 설정 (최영민)
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8000',
+    'localhost:8080',
+)
 
 ROOT_URLCONF = 'config.urls'
 
@@ -269,4 +281,3 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
-
