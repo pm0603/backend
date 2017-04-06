@@ -90,7 +90,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'member.apps.MemberConfig',
-    'performance.apps.PerformanceConfig',
 
     'django.contrib.sites',
 
