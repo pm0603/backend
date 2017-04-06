@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
-from openapi.models import Content
+from openapi.models import Performance
 
 
 class UserManager(BaseUserManager):
@@ -48,10 +48,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     joined_date = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    bookmark_content = models.ManyToManyField(
-        Content,
+    bookmark_performance = models.ManyToManyField(
+        Performance,
         blank=True,
-        through='BookmarkContent',
+        through='Bookmark',
     )
     facebook_id = models.CharField(max_length=50, blank=True)
     is_facebook = models.BooleanField(default=False)
@@ -70,9 +70,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class BookmarkContent(models.Model):
+class Bookmark(models.Model):
     user = models.ForeignKey(MyUser)
-    content = models.ForeignKey(Content)
+    content = models.ForeignKey(Performance)
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
