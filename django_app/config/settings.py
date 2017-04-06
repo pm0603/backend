@@ -23,12 +23,11 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # 디버그 및 S3를 쓰기 위한 설정입니다.(최영민)
 DEBUG = True
 # DEBUG = os.environ.get('MODE') == 'DEBUG'
-STORAGE_S3 = os.environ.get('STORAGE') == 'S3' or DEBUG is False
+# STORAGE_S3 = os.environ.get('STORAGE') == 'S3' or DEBUG is False
 DB_RDS = os.environ.get('DB') == 'RDS' or DEBUG is False
 
-if STORAGE_S3:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 STATIC_URL = '/static/'
@@ -45,19 +44,28 @@ SECRET_KEY = config['django']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-
+# REST관련 설정 및 facebook 로그인 관련 설정
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-
-        # OAuth
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
+    # Open Api 렌더링 및 파서
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_xml.parsers.XMLParser',
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
     'PAGE_SIZE': 1
+
 }
+
+
 
 # Application definition
 
@@ -141,26 +149,6 @@ TEMPLATES = [
     },
 ]
 
-# REST관련 설정 및 facebook 로그인 관련 설정
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
-    ),
-    # Open Api 렌더링 및 파서
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework.parsers.JSONParser',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework_xml.parsers.XMLParser',
-    ),
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
-
-}
-
 # facebook 로그인 기능을 위한 추가 설정
 AUTHENTICATION_BACKENDS = (  # Others auth providers (e.g. Google, OpenId, etc)
 
@@ -186,8 +174,6 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
 # ----------------------------------------------------
-
-
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -244,8 +230,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

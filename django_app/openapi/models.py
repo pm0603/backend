@@ -22,13 +22,13 @@ class Content(models.Model):
     place_url = models.CharField(max_length=200, null=True)
     place_addr = models.CharField(max_length=100, null=True)
     place_seq = models.CharField(max_length=10, null=True)
-    comment = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    comment = models.ForeignKey(Comment, null=True)
 
 
-class PostComment(models.Model):
+class Comment(models.Model):
     post = models.ForeignKey(Content)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    content = models.TextField()
+    text = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
