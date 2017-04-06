@@ -4,7 +4,7 @@ from django.db import models
 from config import settings
 
 
-class Content(models.Model):
+class Performance(models.Model):
     seq = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=100, null=True)
     start_date = models.DateField()
@@ -22,13 +22,13 @@ class Content(models.Model):
     place_url = models.CharField(max_length=200, null=True)
     place_addr = models.CharField(max_length=100, null=True)
     place_seq = models.CharField(max_length=10, null=True)
-    comment = models.ForeignKey(Comment, null=True)
+    comment = models.ForeignKey('openapi.Comment', null=True)
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Content)
+    performance = models.ForeignKey(Performance, related_name='comment_set')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    text = models.TextField()
+    content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
