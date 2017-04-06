@@ -22,7 +22,7 @@ class Performance(models.Model):
     place_url = models.CharField(max_length=200, null=True)
     place_addr = models.CharField(max_length=100, null=True)
     place_seq = models.CharField(max_length=10, null=True)
-    comment = models.ForeignKey('openapi.Comment', null=True)
+    comment = models.ForeignKey('openapi.Comment', null=True, related_name='performance_set')
 
 
 class Comment(models.Model):
